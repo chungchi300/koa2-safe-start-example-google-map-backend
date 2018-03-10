@@ -67,15 +67,56 @@ app.use(async (ctx, next) => {
   const ms = new Date() - start;
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
 });
+function getErrorKey(validationErrorItem) {
+  if (validationErrorItem.origin == 'FUNCTION') {
+    return '_error';
+  } else {
+    return validationErrorItem.path;
+  }
+}
+function parseSequenlizeValidationErrorItems(validationErrorItems) {
+  console.log('validationErrorItems', validationErrorItems);
+  let errorsObj = {};
+  validationErrorItems.forEach(validationErrorItem => {
+    if (errorsObj[getErrorKey(validationErrorItem)]) {
+      //if already have that error msg,no need to assign it data structure
+      return;
+    }
+    errorsObj[getErrorKey(validationErrorItem)] = validationErrorItem.message;
+  });
+
+  return errorsObj;
+}
+function parseSequenlizeError(err) {
+  // if(errors)
+
+  return Object.assign(err, {
+    errors: parseSequenlizeValidationErrorItems(err.errors),
+  });
+}
+function parseBasicError(err) {
+  return Object.assign(err, { errors: { _error: err.message } });
+}
+function parseForLalamove(err) {
+  return { error: err.errors._error };
+}
 // error logger
 app.use(async (ctx, next) => {
   try {
     await next();
   } catch (err) {
-    ctx.status = 400;
     console.log(err);
+
+    ctx.status = 400;
     err.expose = true;
-    err._error = err.message;
+    switch (err.name) {
+      case 'SequelizeValidationError':
+        err = parseSequenlizeError(err);
+        break;
+      default:
+        err = parseBasicError(err);
+    }
+    err = parseForLalamove(err);
     ctx.body = err;
   }
 });

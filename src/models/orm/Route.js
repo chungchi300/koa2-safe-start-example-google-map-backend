@@ -12,6 +12,14 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.JSON,
       allowNull: false,
     },
+    calculationStatus: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    calculationResult: {
+      type: Sequelize.JSON,
+      allowNull: true,
+    },
   };
   var SequelizeUser = sequelize.define('route', model, {
     validate: {
@@ -28,6 +36,9 @@ module.exports = (sequelize, Sequelize) => {
           )
         ) {
           throw new Error('Every location must be number array');
+        }
+        if (this.locations.length < 2) {
+          throw new Error('Must have at least two location');
         }
       },
     },

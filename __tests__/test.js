@@ -28,34 +28,17 @@ describe('route', () => {
     const response = await request(app)
       .post('/route')
       .type('json')
-      .send([['11.1', '11.2'], ['12.1', '12.2']]);
+      .send([
+        ['22.372081', '114.107877'],
+        ['22.284419', '114.159510'],
+        ['22.326442', '114.167811'],
+      ]);
 
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
-    console.log('repsonse', response.body);
     expect(response.body.token.length > 0).toBe(true);
   });
-  test('create fail due to data validation ', async () => {
-    const response = await request(app)
-      .post('/route')
-      .type('json')
-      .send([['a', '11.2'], ['12.1', '12.2']]);
-
-    expect(response.status).toEqual(400);
-    expect(response.type).toEqual('application/json');
-    expect(response.body.message).toEqual('Location lat long ust be number ');
-  });
-  test.only('create fail due to data validation ', async () => {
-    const response = await request(app)
-      .post('/route')
-      .type('json')
-      .send({ name: 'abc' });
-
-    expect(response.status).toEqual(400);
-    expect(response.type).toEqual('application/json');
-    // expect(response.body.message).toEqual('Locations must be array');
-  });
-  test.only('create fail due to data validation every location ', async () => {
+  test('create fail due to data validation -  every location must be array ', async () => {
     const response = await request(app)
       .post('/route')
       .type('json')
@@ -63,9 +46,32 @@ describe('route', () => {
 
     expect(response.status).toEqual(400);
     expect(response.type).toEqual('application/json');
-    // expect(response.body.message).toEqual('Locations must be array');
+    expect(response.body.error.length > 0).toEqual(true);
+  });
+  test('create fail due to data validation - locations must be array', async () => {
+    const response = await request(app)
+      .post('/route')
+      .type('json')
+      .send({ name: 'abc' });
+
+    expect(response.status).toEqual(400);
+    expect(response.type).toEqual('application/json');
+    expect(response.body.error.length > 0).toEqual(true);
+  });
+
+  test('create fail due to data validation - every location must be numeric array ', async () => {
+    const response = await request(app)
+      .post('/route')
+      .type('json')
+      .send([['a', '11.2'], ['12.1', '12.2']]);
+
+    expect(response.status).toEqual(400);
+    expect(response.type).toEqual('application/json');
+
+    expect(response.body.error.length > 0).toEqual(true);
   });
 });
+describe('test google map', () => {});
 // describe('exception handling', () => {
 //   test('exception', async () => {
 //     const response = await request(app).get('/testError');
