@@ -21,7 +21,23 @@ function getLegPointsPath(route) {
     return [leg.end_location.lat, leg.end_location.lng];
   });
 }
+function getShortestRoutes(routes, locations) {
+  let routeSummarys = routes.map(route => {
+    return {
+      total_distance: getTotalDistance(route),
+      total_time: getTotalDuration(route),
+      path: [[Number(locations[0][0]), Number(locations[0][1])]].concat(
+        getLegPointsPath(route)
+      ),
+    };
+  });
+  let shortestDrivingDistanceRouteSummary = routeSummarys.sort(
+    (routeSummaryA, routeSummaryB) =>
+      routeSummaryA.total_distance - routeSummaryB.total_distance
+  )[0];
 
+  return shortestDrivingDistanceRouteSummary;
+}
 async function calculateShortestDistance(locations) {
   var googleMapsClient = require('@google/maps').createClient({
     key: 'AIzaSyCYud1SI_duEuDmwho3GqwJ96dlfzsvxDI',
@@ -45,24 +61,13 @@ async function calculateShortestDistance(locations) {
   if (result.json.status == 'ZERO_RESULTS') {
     throw new Error('ZERO_RESULTS');
   }
-  let routeSummarys = result.json.routes.map(route => {
-    return {
-      total_distance: getTotalDistance(route),
-      total_time: getTotalDuration(route),
-      path: [[Number(locations[0][0]), Number(locations[0][1])]].concat(
-        getLegPointsPath(route)
-      ),
-    };
-  });
-  let shortestDrivingDistanceRouteSummary = routeSummarys.sort(
-    (routeSummaryA, routeSummaryB) =>
-      routeSummaryA.total_distance - routeSummaryB.total_distance
-  )[0];
-  return shortestDrivingDistanceRouteSummary;
+
+  return getShortestRoutes(result.json.routes, locations);
 }
 module.exports = {
   getTotalDuration,
   getTotalDistance,
+  getShortestRoutes,
   getLegPointsPath,
   calculateShortestDistance,
 };
