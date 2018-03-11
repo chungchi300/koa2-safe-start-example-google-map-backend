@@ -41,6 +41,10 @@ async function calculateShortestDistance(locations) {
       optimize: true,
     })
     .asPromise();
+
+  if (result.json.status == 'ZERO_RESULTS') {
+    throw new Error('ZERO_RESULTS');
+  }
   let routeSummarys = result.json.routes.map(route => {
     return {
       total_distance: getTotalDistance(route),

@@ -75,7 +75,7 @@ function getErrorKey(validationErrorItem) {
   }
 }
 function parseSequenlizeValidationErrorItems(validationErrorItems) {
-  console.log('validationErrorItems', validationErrorItems);
+  // console.log('validationErrorItems', validationErrorItems);
   let errorsObj = {};
   validationErrorItems.forEach(validationErrorItem => {
     if (errorsObj[getErrorKey(validationErrorItem)]) {

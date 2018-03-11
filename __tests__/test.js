@@ -8,23 +8,18 @@ afterEach(() => {
   app.close();
 });
 beforeEach(() => {
+  originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 60 * 1000;
   return global.sequelize.sync({ force: true });
 });
-//
-describe('index', () => {
-  test('should respond success message', async () => {
-    const response = await request(app).get('/');
-    expect(response.status).toEqual(200);
-    expect(response.type).toEqual('application/json');
-    expect(response.body).toEqual({
-      app: 'koa2-safe-start',
-      author: 'Jeff Chung',
-      message: 'Welcome my friend',
-    });
+function sleep(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
   });
-});
+}
+
 describe('route', () => {
-  test.only('create route', async () => {
+  test('create route', async () => {
     const response = await request(app)
       .post('/route')
       .type('json')
@@ -70,13 +65,56 @@ describe('route', () => {
 
     expect(response.body.error.length > 0).toEqual(true);
   });
+  test('get route in progress', async () => {
+    const createTokenResponse = await request(app)
+      .post('/route')
+      .type('json')
+      .send([
+        ['22.372081', '114.107877'],
+        ['22.284419', '114.159510'],
+        ['22.326442', '114.167811'],
+      ]);
+
+    const response = await request(app).get(
+      `/route/${createTokenResponse.body.token}`
+    );
+
+    expect(response.status).toEqual(200);
+    expect(response.type).toEqual('application/json');
+    expect(response.body.status).toEqual('in progress');
+  });
+  test('get route succeed', async () => {
+    const createTokenResponse = await request(app)
+      .post('/route')
+      .type('json')
+      .send([
+        ['22.372081', '114.107877'],
+        ['22.284419', '114.159510'],
+        ['22.326442', '114.167811'],
+      ]);
+    await sleep(5000);
+    const response = await request(app).get(
+      `/route/${createTokenResponse.body.token}`
+    );
+    expect(response.status).toEqual(200);
+    expect(response.type).toEqual('application/json');
+    expect(response.body.status).toEqual('success');
+  });
+  test('get route fail', async () => {
+    const createTokenResponse = await request(app)
+      .post('/route')
+      .type('json')
+      .send([
+        ['12.372081', '114.107877'],
+        ['52.284419', '114.159510'],
+        ['42.326442', '114.167811'],
+      ]);
+    await sleep(5000);
+    const response = await request(app).get(
+      `/route/${createTokenResponse.body.token}`
+    );
+    expect(response.status).toEqual(200);
+    expect(response.type).toEqual('application/json');
+    expect(response.body.status).toEqual('failure');
+  });
 });
-describe('test google map', () => {});
-// describe('exception handling', () => {
-//   test('exception', async () => {
-//     const response = await request(app).get('/testError');
-//     expect(response.status).toEqual(400);
-//     expect(response.type).toEqual('application/json');
-//     expect(response.body).toEqual({ _error: 'demo exception', expose: true });
-//   });
-// });
