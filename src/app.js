@@ -134,7 +134,7 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-const port = parseInt(config.port || '3000');
+const port = parseInt(config.port || '3001');
 const server = http.createServer(app.callback());
 
 server.listen(port);

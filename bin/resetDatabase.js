@@ -1,4 +1,5 @@
 var path = require('path');
+require('../src/smartRequire');
 async function reloadDatabase() {
   console.log('reloading');
   await global.sequelize.sync({ force: true });
