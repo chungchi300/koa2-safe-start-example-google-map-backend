@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+     image: mysql:5.7
+     volumes:
+       - dbdata:/var/lib/mysql
+     restart: always
+     environment:
+       MYSQL_ROOT_PASSWORD: someLalamove
+       MYSQL_DATABASE: lalamove
+       MYSQL_USER: lalamove
+       MYSQL_PASSWORD: lalamove
+  web:
+    depends_on:
+      - db
+    build: .
+    ports:
+     - "3001:80"
+    restart: always
+volumes:
+    dbdata:

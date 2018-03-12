@@ -4,10 +4,13 @@
   "author": "jeffchung",
   "scripts": {
     "start": "npx --no-install nodemon src/app.js ",
-    "production": "NODE_ENV=production npx --no-install pm2 start src/app.js --name 'koa2-safe-start'",
+    "production":
+      "NODE_ENV=production npx --no-install pm2 start src/app.js --name 'koa2-safe-start'",
     "reset": "node bin/resetDatabase.js",
+
     "test": "npx --no-install  jest --watchAll --runInBand --useStderr",
-    "testProd": "NODE_ENV=production  npx --no-install  jest --watchAll --runInBand --useStderr"
+    "testProd":
+      "NODE_ENV=production  npx --no-install  jest --watchAll --runInBand --useStderr"
   },
   "jest": {
     "testEnvironment": "node"
@@ -39,6 +42,8 @@
     "passport-oauth2-jwt-bearer": "^0.2.0",
     "pm2": "^2.9.1",
     "sequelize": "^4.13.8",
+    "sequelize-cli": "^4.0.0",
+    "shelljs": "^0.8.1",
     "sparkpost": "^2.1.2",
     "sqlite3": "^3.1.13",
     "uuid": "^3.1.0",

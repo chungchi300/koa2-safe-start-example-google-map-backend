@@ -12,6 +12,7 @@ RUN ls -al -R
 
 RUN npm install --production
 
+RUN npm run reset
 # Show current folder structure in logs
 RUN ls -al -R
 
