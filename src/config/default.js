@@ -13,8 +13,8 @@ module.exports = {
       password: 'lalamove',
     },
     extra: {
-      host: 'localhost',
-      port: '1306',
+      host: process.env.dbhost,
+      port: process.env.dbport,
       //default sqlite but suggest mysql in production
       dialect: 'mysql',
       pool: {

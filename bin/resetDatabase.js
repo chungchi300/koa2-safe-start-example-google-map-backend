@@ -2,15 +2,16 @@ var path = require('path');
 require('../src/smartRequire');
 async function reloadDatabase() {
   const shelljs = require('shelljs');
+  console.log('env', process.env.demo);
   let resetPath = `${global.config.database.extra.dialect}://${global.config
     .database.connection.username}:${global.config.database.connection
     .password}@${global.config.database.extra.host}:${global.config.database
     .extra.port}/${global.config.database.connection.database}`;
-
+  //
   shelljs.exec(`node_modules/.bin/sequelize db:drop  --url '${resetPath}'`);
 
   shelljs.exec(`node_modules/.bin/sequelize db:create  --url '${resetPath}'`);
-  //
+
   await global.sequelize.sync({ force: true });
 
   process.exit(0);

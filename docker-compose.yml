@@ -1,5 +1,6 @@
 version: '3'
 services:
+
   db:
      image: mysql:5.7
      volumes:
@@ -12,12 +13,16 @@ services:
        MYSQL_DATABASE: lalamove
        MYSQL_USER: lalamove
        MYSQL_PASSWORD: lalamove
+
   web:
     depends_on:
       - db
     build: .
     ports:
-     - "80:3001"
+     - "2001:3001"
     restart: always
+    environment:
+       dbhost: db
+       dbport: 1306
 volumes:
     dbdata:
