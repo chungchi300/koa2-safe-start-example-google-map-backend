@@ -2,13 +2,12 @@ FROM keymetrics/pm2:latest-alpine
 
 # Bundle APP files
 COPY src src/
+COPY bin bin/
 COPY package.json .
 COPY pm2.json .
 
 # Install app dependencies
 ENV NPM_CONFIG_LOGLEVEL warn
-
-RUN ls -al -R
 
 RUN npm install --production
 

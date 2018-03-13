@@ -14,6 +14,7 @@ module.exports = {
     },
     extra: {
       host: 'localhost',
+      port: '1306',
       //default sqlite but suggest mysql in production
       dialect: 'mysql',
       pool: {

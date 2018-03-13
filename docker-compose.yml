@@ -5,6 +5,8 @@ services:
      volumes:
        - dbdata:/var/lib/mysql
      restart: always
+     ports:
+       - "1306:3306"
      environment:
        MYSQL_ROOT_PASSWORD: someLalamove
        MYSQL_DATABASE: lalamove
@@ -15,7 +17,7 @@ services:
       - db
     build: .
     ports:
-     - "3001:80"
+     - "80:3001"
     restart: always
 volumes:
     dbdata:

@@ -4,21 +4,15 @@ async function reloadDatabase() {
   const shelljs = require('shelljs');
   let resetPath = `${global.config.database.extra.dialect}://${global.config
     .database.connection.username}:${global.config.database.connection
-    .password}@${global.config.database.extra.host}/${global.config.database
-    .connection.database}`;
+    .password}@${global.config.database.extra.host}:${global.config.database
+    .extra.port}/${global.config.database.connection.database}`;
 
   shelljs.exec(`node_modules/.bin/sequelize db:drop  --url '${resetPath}'`);
 
   shelljs.exec(`node_modules/.bin/sequelize db:create  --url '${resetPath}'`);
-
+  //
   await global.sequelize.sync({ force: true });
 
-  await global.orm.Feedback.create({
-    content: 'safe start koa2 is easy to use',
-  });
-  await global.orm.Feedback.create({
-    content: 'safe start koa2 help me finish my work eariler',
-  });
   process.exit(0);
 }
 try {
