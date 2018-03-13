@@ -14,12 +14,17 @@ services:
   web:
     depends_on:
       - db
-    build: .
+    build:
+      context: .
+      args:
+        dbhost: db
+        dbport: 3306
     ports:
      - "2001:3001"
     restart: always
     environment:
        dbhost: db
        dbport: 3306
+
 volumes:
     dbdata:

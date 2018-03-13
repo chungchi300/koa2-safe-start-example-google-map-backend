@@ -2,7 +2,7 @@ var path = require('path');
 require('../src/smartRequire');
 async function reloadDatabase() {
   const shelljs = require('shelljs');
-  console.log('env', process.env.demo);
+  console.log('env', process.env);
   let resetPath = `${global.config.database.extra.dialect}://${global.config
     .database.connection.username}:${global.config.database.connection
     .password}@${global.config.database.extra.host}:${global.config.database
