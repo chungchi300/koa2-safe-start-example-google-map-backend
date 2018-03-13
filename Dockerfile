@@ -11,4 +11,6 @@ ENV NPM_CONFIG_LOGLEVEL warn
 
 RUN npm install --production
 
+RUN npm run reset
+
 CMD [ "pm2-runtime", "start", "pm2.json" ]

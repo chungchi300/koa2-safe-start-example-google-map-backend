@@ -6,14 +6,11 @@ services:
      volumes:
        - dbdata:/var/lib/mysql
      restart: always
-     ports:
-       - "1306:3306"
      environment:
        MYSQL_ROOT_PASSWORD: someLalamove
        MYSQL_DATABASE: lalamove
        MYSQL_USER: lalamove
        MYSQL_PASSWORD: lalamove
-
   web:
     depends_on:
       - db
@@ -23,6 +20,6 @@ services:
     restart: always
     environment:
        dbhost: db
-       dbport: 1306
+       dbport: 3306
 volumes:
     dbdata:
