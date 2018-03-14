@@ -1,3 +1,7 @@
+const shelljs = require('shelljs');
+
+shelljs.exec('npm run reset');
+
 const http = require('http');
 const Koa = require('koa');
 const path = require('path');

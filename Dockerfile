@@ -11,4 +11,8 @@ ENV NPM_CONFIG_LOGLEVEL warn
 
 RUN npm install --production
 
+
+
+# CMD is runtime command when up,one docker file only have one CMD
+
 CMD [ "pm2-runtime", "start", "pm2.json" ]
