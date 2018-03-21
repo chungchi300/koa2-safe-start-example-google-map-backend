@@ -98,7 +98,14 @@ describe('route', () => {
     );
     expect(response.status).toEqual(200);
     expect(response.type).toEqual('application/json');
+    // console.log('body', response.body);
     expect(response.body.status).toEqual('success');
+    //Optimized path
+    expect(response.body.path).toEqual([
+      ['22.372081', '114.107877'],
+      ['22.326442', '114.167811'],
+      ['22.284419', '114.159510'],
+    ]);
   });
   test('get route fail', async () => {
     const createTokenResponse = await request(app)
